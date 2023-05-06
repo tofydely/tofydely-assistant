@@ -1,0 +1,65 @@
+name: Build and deploy website to Firebase Hosting
+on: push
+jobs:
+  hosting:
+    name: Deploy Website
+    runs-on: ubuntu-latest
+    environment:
+      name: Tofy Dely's Assistant Web
+    strategy:
+      matrix:
+        sdk: [ 2.19.0-430.0.dev ]
+    steps:
+      # Checkout Repository
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Configura las variables de entorno
+      - uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_PROJECT_ID: ${{secrets.PROJECT_ID}}
+          envkey_FIREBASE_API_KEY_WEB_WIN_LIN: ${{secrets.FIREBASE_API_KEY_WEB_WIN_LIN}}
+          envkey_FIREBASE_API_KEY_ANDROID: ${{secrets.FIREBASE_API_KEY_ANDROID}}
+          envkey_FIREBASE_API_KEY_IOS: ${{secrets.FIREBASE_API_KEY_IOS}}
+          envkey_FIREBASE_API_KEY_MACOS: ${{secrets.FIREBASE_API_KEY_MACOS}}
+          envkey_FIREBASE_APP_ID_WEB: ${{secrets.FIREBASE_APP_ID_WEB}}
+          envkey_FIREBASE_APP_ID_ANDROID: ${{secrets.FIREBASE_APP_ID_ANDROID}}
+          envkey_FIREBASE_APP_ID_IOS: ${{secrets.FIREBASE_APP_ID_IOS}}
+          envkey_FIREBASE_APP_ID_WINDOWS: ${{secrets.FIREBASE_APP_ID_WINDOWS}}
+          envkey_FIREBASE_APP_ID_LINUX: ${{secrets.FIREBASE_APP_ID_LINUX}}
+          envkey_FIREBASE_MESSAGING_SENDER_ID: ${{secrets.FIREBASE_MESSAGING_SENDER_ID}}
+          envkey_FIREBASE_AUTH_DOMAIN: ${{secrets.FIREBASE_AUTH_DOMAIN}}
+          envkey_FIREBASE_STORAGE_BUCKET: ${{secrets.FIREBASE_STORAGE_BUCKET}}
+          envkey_FIREBASE_MEASUREMENT_ID_WEB: ${{secrets.FIREBASE_MEASUREMENT_ID_WEB}}
+          envkey_FIREBASE_MEASUREMENT_ID_WINDOWS: ${{secrets.FIREBASE_MEASUREMENT_ID_WINDOWS}}
+          envkey_FIREBASE_MEASUREMENT_ID_LINUX: ${{secrets.FIREBASE_MEASUREMENT_ID_LINUX}}
+          envkey_FIREBASE_ANDROID_CLIENT_ID: ${{secrets.FIREBASE_ANDROID_CLIENT_ID}}
+          envkey_FIREBASE_IOS_CLIENT_ID: ${{secrets.FIREBASE_IOS_CLIENT_ID}}
+          envkey_FIREBASE_IOS_BUNDLE_ID: ${{secrets.FIREBASE_IOS_BUNDLE_ID}}
+
+      # Install Flutter command
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'master'
+
+      # Build Website
+      - name: Build Website
+        run: |
+          flutter config --enable-web
+          flutter clean
+          flutter pub get
+          flutter doctor
+          flutter build web --release
+        working-directory: ./
+
+      # Deploy Firebase Hosting
+      - name: Deploy Firebase Hosting
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./

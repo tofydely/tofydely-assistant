@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "tofydely"
+  },
+  "targets": {
+    "tofydely": {
+      "hosting": {
+        "assistant": [
+          "assistant-tofydely"
+        ]
+      }
+    }
+  }
+}
