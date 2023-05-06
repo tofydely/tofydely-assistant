@@ -12,11 +12,22 @@ import 'package:tofydely_assistant/util.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load();
+  Widget appWidget;
 
-  await FirebaseProvider().initialize();
+  try {
+    await dotenv.load();
+    debugPrint('Loaded .env file');
 
-  runApp(const MyApp());
+    await FirebaseProvider().initialize();
+    debugPrint('Firebase initialized');
+
+    appWidget = const MyApp();
+  } catch (e) {
+    debugPrint('Error: $e');
+    appWidget = const ErrorWidget();
+  }
+
+  runApp(appWidget);
 }
 
 class MyApp extends StatelessWidget {
@@ -224,4 +235,43 @@ void _playBase64Mp3(String base64String) async {
 
   // Reproduce el archivo mp3
   await audioPlayer.play();
+}
+
+class ErrorWidget extends StatelessWidget {
+  const ErrorWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Ha ocurrido un error al cargar las variables de entorno o al inicializar Firebase.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await dotenv.load();
+                    debugPrint('Loaded .env file');
+
+                    await FirebaseProvider().initialize();
+                    debugPrint('Firebase initialized');
+                  } catch (e) {
+                    debugPrint('Error: $e');
+                  }
+                },
+                child: const Text('Reintentar'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
