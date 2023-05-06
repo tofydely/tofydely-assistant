@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
 
-    debugPrint(res.toString());
+    print(res.toString());
 
     setState(() {
       voces = Voice.fromJsonList(res);
@@ -155,11 +155,11 @@ class _MyHomePageState extends State<MyHomePage> {
         "role": _role.text
       },
     ).then((res) {
-      debugPrint("Respondió...");
+      print("Respondió...");
 
       _playBase64Mp3(res);
     }).catchError((e) {
-      debugPrint(e.toString());
+      print(e.toString());
     });
   }
 }
