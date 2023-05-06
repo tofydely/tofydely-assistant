@@ -17,6 +17,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
+    print(
+        'env API_KEY_WEB_WIN_LIN ${dotenv.env['FIREBASE_API_KEY_WEB_WIN_LIN']}');
+    print('env APP_ID_WEB ${dotenv.env['FIREBASE_APP_ID_WEB']}');
+
     if (kIsWeb) {
       return web;
     }
