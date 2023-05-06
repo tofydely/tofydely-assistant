@@ -16,6 +16,9 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
       # Configura las variables de entorno
       - uses: SpicyPizza/create-envfile@v1
