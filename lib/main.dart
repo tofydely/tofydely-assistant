@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
 
-    print((e ?? '-> error nulo').toString());
+    print((res ?? '-> error nulo').toString());
 
     setState(() {
       voces = Voice.fromJsonList(res);
