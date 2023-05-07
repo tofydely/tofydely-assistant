@@ -25,7 +25,7 @@ jobs:
 
       # Configura las variables de entorno
       - name: Configura las variables de entorno
-      - uses: SpicyPizza/create-envfile@v1.3
+      - run: SpicyPizza/create-envfile@v1.3
         with:
           envkey_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           envkey_FIREBASE_API_KEY_WEB_WIN_LIN: ${{ secrets.FIREBASE_API_KEY_WEB_WIN_LIN }}
