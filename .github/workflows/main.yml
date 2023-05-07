@@ -23,6 +23,21 @@ jobs:
         with:
           node-version: '16'
 
+      # Install Flutter command
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'master'
+
+      # Build Website
+      - name: Build Website
+        run: |
+          flutter config --enable-web
+          flutter clean
+          flutter pub get
+          flutter doctor
+          flutter build web --release
+        working-directory: ./
+
       # Configura las variables de entorno
       - uses: SpicyPizza/create-envfile@v1.3
         with:
@@ -45,21 +60,6 @@ jobs:
           envkey_FIREBASE_ANDROID_CLIENT_ID: ${{ secrets.FIREBASE_ANDROID_CLIENT_ID }}
           envkey_FIREBASE_IOS_CLIENT_ID: ${{ secrets.FIREBASE_IOS_CLIENT_ID }}
           envkey_FIREBASE_IOS_BUNDLE_ID: ${{ secrets.FIREBASE_IOS_BUNDLE_ID }}
-
-      # Install Flutter command
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: 'master'
-
-      # Build Website
-      - name: Build Website
-        run: |
-          flutter config --enable-web
-          flutter clean
-          flutter pub get
-          flutter doctor
-          flutter build web --release
-        working-directory: ./
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
