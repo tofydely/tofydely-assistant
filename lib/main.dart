@@ -10,13 +10,13 @@ import 'package:tofydely_assistant/firebase_provider.dart';
 import 'package:tofydely_assistant/util.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   Widget appWidget;
 
   try {
     await dotenv.load();
     debugPrint('Loaded .env file');
+
+    WidgetsFlutterBinding.ensureInitialized();
 
     await FirebaseProvider().initialize();
     debugPrint('Firebase initialized');
